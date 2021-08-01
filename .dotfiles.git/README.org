@@ -1,0 +1,38 @@
+#+OPTIONS: num:nil
+#+TITLE: Manage Dotfiles With a Bare Git Repository
+#+AUTHOR: Gabriel Petrini
+#+LANG: en
+
+
+* Setup
+
+
+1. Create a git bare repository at ~/.dotfiles.git to track files.
+2. Add alias setting to shell configuration file. I use zsh so it’s .zshrc. For bash, it’d be .bashrc. Note how the paths for git directory and working tree are set.
+3. Reload the shell setting.
+4. Prevent untracked files from showing up when we call dotfiles status.
+
+#+begin_example sh
+git init --bare $HOME/.dotfiles.git
+echo 'alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME"' >> $HOME/.zshrc
+source ~/.zshrc
+dotfiles config --local status.showUntrackedFiles no
+#+end_example
+
+* Example
+
+That finishes the setup. Use the aliased command from the home directory to manage files, and use git remote repo if you want to manage the files online.
+
+#+begin_example sh
+dotfiles status
+dotfiles add .vimrc
+dotfiles commit -m "Add vimrc"
+dotfiles remote add origin https://www.github.com/username/repo.git
+dotfiles push origin master
+#+end_example
+
+
+
+* References
+
+- [[https://harfangk.github.io/2016/09/18/manage-dotfiles-with-a-git-bare-repository.html][Source]]
